@@ -1,7 +1,7 @@
 const { default: Dice } = require('./class.Dice');
 const { default: UI } = require('./class.UI');
 const { default: Bet } = require('./class.Bet');
-let peer,connection,ui,players = [],connections = [], game, name,isHost = false;
+let peer,connection,ui,players = [],connections = [], game, name,isHost = false,palefico = false;
 
 function hostGame() {
     return new Promise((res, rej) => {
@@ -59,6 +59,9 @@ function onData(data) {
             break;
         case 'doubtBet':
             checkDice(data.name);
+            break;
+        case 'exactBet':
+            exactBet(data.name);
             break;
         case 'checkDice':
             ui.showResult(data.result);
@@ -133,7 +136,8 @@ function playGame() {
         currentBet: {
             dice: null,
             count: null
-        }
+        },
+        isPalefico: palefico
     };
     syncGame(game);
     ui.setGame(game,name);
@@ -151,12 +155,14 @@ function newRound(loser) {
         dice: null,
         count: null
     };
+    game.isPalefico = palefico;
     game.players = players;
     syncGame(game);
     ui.setGame(game, name);
 }
 
 function exactBet(name) {
+    palefico = false;
     let diceCount = {
         '1': 0,
         '2': 0,
@@ -188,6 +194,9 @@ function exactBet(name) {
                 if (player.diceRemaining == 0) {
                     player.isOut = true;
                     isOut = true;
+                }
+                if (player.diceRemaining == 1) {
+                    palefico = true;
                 }
             }
         })
@@ -225,17 +234,30 @@ function checkDice(name) {
         });
     });
     let loser,isOut = false;
-    if (diceCount[game.currentBet.dice] + diceCount['1'] < game.currentBet.count) {
-        loser = game.currentBet.player;
+    if (palefico) {
+        if (diceCount[game.currentBet.dice] < game.currentBet.count) {
+            loser = game.currentBet.player;
+        } else {
+            loser = name;
+        }
     } else {
-        loser = name;
+        if (diceCount[game.currentBet.dice] + diceCount['1'] < game.currentBet.count) {
+            loser = game.currentBet.player;
+        } else {
+            loser = name;
+        }
     }
+    let wasPalefico = palefico;
+    palefico = false;
     players.forEach(player => {
         if (player.name == loser) {
             player.diceRemaining = player.diceRemaining - 1;
             if (player.diceRemaining == 0) {
                 isOut = true;
                 player.isOut = true;
+            }
+            if (player.diceRemaining == 1) {
+                palefico = true;
             }
         }
     })
@@ -245,7 +267,8 @@ function checkDice(name) {
         doubt: name,
         loser: loser,
         total: diceCount[game.currentBet.dice] + diceCount['1'],
-        isOut: isOut
+        isOut: isOut,
+        wasPalefico: wasPalefico
     }
     connections.forEach(conn => {
         conn.send({
@@ -277,6 +300,7 @@ function updateBet(bet) {
     game.currentBet = bet;
     updateCurrentPlayer(currentPlayerIndex);
     game.players = players;
+    game.isPalefico = palefico;
     syncGame(game);
     ui.setGame(game, name);
 }
@@ -348,9 +372,22 @@ function init() {
         return isHost;
     }
 
-    window.exactBet = exactBet;
+    window.exactBet = function (name) {
+        if (isHost) {
+            exactBet(name);
+        } else {
+            connection.send({
+                action: 'exactBet',
+                name: name
+            });
+        }
+    }
 
     window.newRound = newRound;
+
+    window.isPalefico = function () {
+        return palefico;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', init, false);

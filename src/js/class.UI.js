@@ -67,7 +67,12 @@ export default class UI {
                         <h2>It is your go</h2>
                         <p>
                             Bet: <input type='number' id="betNumber" value="${game.currentBet.count ? game.currentBet.count : ''}" />x 
-                            <select id="betDie" value="${game.currentBet.dice ? game.currentBet.dice : ''}">
+                            <select id="betDie" value="${game.currentBet.dice ? game.currentBet.dice : ''}" ${game.currentBet.dice && game.isPalefico ? 'disabled' : ''}>
+                                ${
+                                    game.isPalefico ? 
+                                        `<option value='1' ${game.currentBet.dice && game.currentBet.dice == 1 ? 'selected' : ''}>1</option>`
+                                        : ``
+                                }
                                 <option value='2' ${game.currentBet.dice && game.currentBet.dice == 2 ? 'selected' : ''}>2</option>
                                 <option value='3' ${game.currentBet.dice && game.currentBet.dice == 3 ? 'selected' : ''}>3</option>
                                 <option value='4' ${game.currentBet.dice && game.currentBet.dice == 4 ? 'selected' : ''}>4</option>
@@ -92,7 +97,7 @@ export default class UI {
                                 })()'
                             >Place Bet</button>
                             ${
-                                game.currentBet.dice ?
+                                game.currentBet.dice && !game.isPalefico ?
                                 `<button
                                     id="exact"
                                     onClick='(() => {
@@ -129,13 +134,13 @@ export default class UI {
                 dice += `
                     <li>
                         ${
-                            die == result.bet.dice || die == 1 ? 
+                            die == result.bet.dice || (die == 1 && !result.wasPalefico) ? 
                                 '<b>'
                                 : ''
                         }
                             ${die}
                         ${
-                            die == result.bet.dice || die == 1 ? 
+                            die == result.bet.dice || (die == 1 && !result.wasPalefico) ? 
                                 '</b>'
                                 : ''
                         }
@@ -155,7 +160,7 @@ export default class UI {
             <h2>Show the dice!</h2>
             <ul class='players'>${players}</ul>
             <p>The bet was ${result.bet.count}x ${result.bet.dice}. ${result.doubt} doubted.</p>
-            <p>There were a total of ${result.total}x ${result.bet.dice} + 1.</p>
+            <p>There were a total of ${result.total}x ${result.bet.dice} ${result.wasPalefico ? '' : '+ 1.'}</p>
             <p>${result.loser} loses a die.</p>
             ${
                 result.isOut ?
