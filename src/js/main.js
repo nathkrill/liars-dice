@@ -62,6 +62,10 @@ function onData(data) {
             break;
         case 'checkDice':
             ui.showResult(data.result);
+            break;
+        case 'showExact':
+            ui.showExact(data.result);
+            break;
         default:
             // console.log(data);
             break;
@@ -152,6 +156,60 @@ function newRound(loser) {
     ui.setGame(game, name);
 }
 
+function exactBet(name) {
+    let diceCount = {
+        '1': 0,
+        '2': 0,
+        '3': 0,
+        '4': 0,
+        '5': 0,
+        '6': 0,
+    };
+    players.forEach(player => {
+        player.dice.forEach(die => {
+            diceCount[die.toString()]++;
+        });
+    });
+    let isOut = false,didWin = false,gotDice = false;
+    if (diceCount[game.currentBet.dice] + diceCount['1'] == game.currentBet.count) {
+        didWin = true;
+        players.forEach(player => {
+            if (player.name == name) {
+                if (player.diceRemaining < 5) {
+                    gotDice = true;
+                    player.diceRemaining = player.diceRemaining + 1;
+                }
+            }
+        })
+    } else {
+        players.forEach(player => {
+            if (player.name == name) {
+                player.diceRemaining = player.diceRemaining - 1;
+                if (player.diceRemaining == 0) {
+                    player.isOut = true;
+                    isOut = true;
+                }
+            }
+        })
+    }
+    let result = {
+        players: players,
+        bet: game.currentBet,
+        exact: name,
+        win: didWin,
+        gotDice: gotDice,
+        total: diceCount[game.currentBet.dice] + diceCount['1'],
+        isOut: isOut
+    }
+    connections.forEach(conn => {
+        conn.send({
+            action: 'showExact',
+            result: result
+        });
+    });
+    ui.showExact(result);
+}
+
 function checkDice(name) {
     let diceCount = {
         '1': 0,
@@ -177,6 +235,7 @@ function checkDice(name) {
             player.diceRemaining = player.diceRemaining - 1;
             if (player.diceRemaining == 0) {
                 isOut = true;
+                player.isOut = true;
             }
         }
     })
@@ -288,6 +347,8 @@ function init() {
     window.isHost = function () {
         return isHost;
     }
+
+    window.exactBet = exactBet;
 
     window.newRound = newRound;
 }
