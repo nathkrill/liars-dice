@@ -69,18 +69,8 @@ export default class UI {
                         <h2>It is your go</h2>
                         <p>
                             Bet: <input type='number' id="betNumber" value="${game.currentBet.count ? game.currentBet.count : ''}" />x 
-                            <select id="betDie" value="${game.currentBet.dice ? game.currentBet.dice : ''}" ${game.currentBet.dice && game.isPalefico ? 'disabled' : ''}>
-                                ${
-                                    game.isPalefico ? 
-                                        `<option value='1' ${game.currentBet.dice && game.currentBet.dice == 1 ? 'selected' : ''}>1</option>`
-                                        : ``
-                                }
-                                <option value='2' ${game.currentBet.dice && game.currentBet.dice == 2 ? 'selected' : ''}>2</option>
-                                <option value='3' ${game.currentBet.dice && game.currentBet.dice == 3 ? 'selected' : ''}>3</option>
-                                <option value='4' ${game.currentBet.dice && game.currentBet.dice == 4 ? 'selected' : ''}>4</option>
-                                <option value='5' ${game.currentBet.dice && game.currentBet.dice == 5 ? 'selected' : ''}>5</option>
-                                <option value='6' ${game.currentBet.dice && game.currentBet.dice == 6 ? 'selected' : ''}>6</option>
-                            </select>
+                            
+                            <dice-counter id="betDie" value="${game.currentBet.dice ? game.currentBet.dice : ''}" ${game.isPalefico ? 'allowOnes' : ''}></dice-counter>
                             <button
                                 id="placeBet"
                                 onClick='(() => {
