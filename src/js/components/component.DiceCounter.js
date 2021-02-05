@@ -19,6 +19,7 @@ class DiceCounter extends HTMLElement {
         this.attachShadow({mode: 'open'});
 
         this.wrapper = document.createElement('div');
+        this.wrapper.classList.add('wrapper');
 
         this.incrementButton = document.createElement('button');
         this.incrementButton.innerHTML = '+';
@@ -26,7 +27,8 @@ class DiceCounter extends HTMLElement {
         this.decrementButton = document.createElement('button');
         this.decrementButton.innerHTML = '-';
 
-        this.counter = document.createElement('span');
+        this.counter = document.createElement('dice-el');
+        this.counter.setAttribute('value', this.value);
 
         this.incrementButton.addEventListener('click', this.increment.bind(this), false);
         this.decrementButton.addEventListener('click', this.decrement.bind(this), false);
@@ -38,7 +40,7 @@ class DiceCounter extends HTMLElement {
         const style = document.createElement('style');
         style.textContent = `
 
-            div {
+            div.wrapper {
                 display: inline-flex;
                 flex-flow: row nowrap;
                 justify-content: center;
@@ -68,22 +70,9 @@ class DiceCounter extends HTMLElement {
                 cursor: not-allowed;
             }
 
-            span {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: var(--dice-counter-count-size, 1em);
-                border-width: var(--dice-counter-border-width, 1px);
-                border-color: var(--dice-counter-border-color, black);
-                border-style: var(--dice-counter-border-style, solid);
-                border-radius: var(--dice-counter-count-border-radius, 4px);
+            dice-el {
                 margin: 0 var(--dice-counter-spacing, 0.2em);
-                padding: 0.5em;
-                line-height: 1;
-                width: var(--dice-counter-count-size, 1.5em);
-                height: var(--dice-counter-count-size, 1.5em);
             }
-        
         `;
 
         this.shadowRoot.append(style,this.wrapper);
@@ -91,7 +80,7 @@ class DiceCounter extends HTMLElement {
     }
 
     updateDOM() {
-        this.counter.innerHTML = this.value;
+        this.counter.setAttribute('value',this.value);
         if (this.value == 6) {
             this.incrementButton.disabled = true;
         } else {
