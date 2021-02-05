@@ -68,7 +68,7 @@ export default class UI {
                     `
                         <h2>It is your go</h2>
                         <p>
-                            Bet: <input type='number' id="betNumber" value="${game.currentBet.count ? game.currentBet.count : ''}" />x 
+                            Bet: <input type='number' id="betNumber" value="${game.currentBet.count ? game.currentBet.count : '1'}" />x 
                             
                             <dice-counter id="betDie" value="${game.currentBet.dice ? game.currentBet.dice : ''}" ${game.isPalefico ? 'allowOnes' : ''}></dice-counter>
                             <button
@@ -84,10 +84,10 @@ export default class UI {
                                             player: "${currentPlayer.name}"
                                         });
                                     }, e => {
-                                        window.alert("Invalid bet")
+                                        badBet.innerHTML = e;
                                     })
                                 })()'
-                            >Place Bet</button>
+                            >Place Bet</button><span id="badBet" style='color: red;'><span>
                             ${
                                 game.currentBet.dice && !game.isPalefico ?
                                 `<button

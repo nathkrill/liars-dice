@@ -154,7 +154,7 @@ function playersRemaining() {
 }
 
 function declareWinner() {
-    
+
 }
 
 function newRound(loser) {
@@ -361,14 +361,17 @@ function init() {
 
     window.validateBet = function (newBet, currentBet) {
         return new Promise((res, rej) => {
+            if (newBet.count == 0) {
+                rej('You cannot bet 0 dice.');
+            }
             if (!currentBet) {
                 res();
             }
             if (newBet.count < currentBet.count) {
-                rej();
+                rej('You must increase the bet.');
             }
             if (newBet.count == currentBet.count && newBet.dice <= currentBet.dice) {
-                rej();
+                rej('You may only decrease the dice if the bet increases.');
             }
             res();
         })
