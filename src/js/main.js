@@ -163,20 +163,21 @@ function checkDice(name) {
             }
         }
     })
-    connections.forEach(conn => {
-        conn.send({
-            action: 'checkDice',
-            result: result
-        });
-    });
-    ui.showResult({
+    let result = {
         players: players,
         bet: game.currentBet,
         doubt: name,
         loser: loser,
         total: diceCount[game.currentBet.dice] + diceCount['1'],
         isOut: isOut
-    })
+    }
+    connections.forEach(conn => {
+        conn.send({
+            action: 'checkDice',
+            result: result
+        });
+    });
+    ui.showResult(result);
 }
 
 
