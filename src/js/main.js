@@ -143,12 +143,40 @@ function playGame() {
     ui.setGame(game,name);
 }
 
-function newRound(loser) {
-    rollDice();
+function playersRemaining() {
+    let count = 0;
     players.forEach(player => {
+        if (!player.isOut) {
+            count++;
+        }
+    });
+    return count;
+}
+
+function declareWinner() {
+    
+}
+
+function newRound(loser) {
+    if (playersRemaining == 1) {
+        declareWinner();
+        return;
+    }
+    rollDice();
+    players.forEach((player,index) => {
         player.isCurrent = false;
         if (player.name == loser) {
-            player.isCurrent = true;
+            if (player.isOut) {
+                let nextIndex = index;
+                if (index == players.length - 1) {
+                    nextIndex = 0;
+                } else {
+                    nextIndex++;
+                }
+                newRound(players[nextIndex].name);
+            } else {
+                player.isCurrent = true;
+            }
         }
     });
     game.currentBet = {

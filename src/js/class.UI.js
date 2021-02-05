@@ -31,7 +31,7 @@ export default class UI {
                     <h3>
                         ${player.isCurrent ? '<b>' : '' }
                             ${player.isOut ? '<strike>' : ''}
-                                ${player.name}
+                                ${player.name} ${!player.isOut ? `(${player.diceRemaining} dice left)` : ''}
                             ${player.isOut ? '</strike>' : ''}
                         ${player.isCurrent ? '</b>' : '' }
                     </h3>
@@ -42,9 +42,11 @@ export default class UI {
             }
         });
         let myDice = '';
-        currentPlayer.dice.forEach(die => {
-            myDice += `<li>${die}</li>`;
-        });
+        if (!currentPlayer.isOut) {
+            currentPlayer.dice.forEach(die => {
+                myDice += `<li>${die}</li>`;
+            });
+        }
         let item = document.createElement('article');
         item.classList.add('game');
         item.innerHTML = `
