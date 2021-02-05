@@ -21,7 +21,11 @@ export default class UI {
         this.clear();
         let players = '';
         let currentPlayer;
+        let turnPlayer;
         game.players.forEach(player => {
+            if (player.isCurrent) {
+                turnPlayer = player.name;
+            }
             players += `
                 <li>
                     <h3>
@@ -54,7 +58,6 @@ export default class UI {
                     game.currentBet.dice ? `${game.currentBet.player} bet: ${game.currentBet.count}x ${game.currentBet.dice}`
                     : 'There is no current bet'
                 }
-                
             </p>
             <h2>My Dice</h2>
             <ul class='dice'>${myDice}</ul>
@@ -63,13 +66,13 @@ export default class UI {
                     `
                         <h2>It is your go</h2>
                         <p>
-                            Bet: <input type='number' id="betNumber" value="${game.currentBet.count ? game.currentBet.count : ''}" />
-                            <select id="betDie">
-                                <option value='2'>2</option>
-                                <option value='3'>3</option>
-                                <option value='4'>4</option>
-                                <option value='5'>5</option>
-                                <option value='6'>6</option>
+                            Bet: <input type='number' id="betNumber" value="${game.currentBet.count ? game.currentBet.count : ''}" />x 
+                            <select id="betDie" value="${game.currentBet.dice ? game.currentBet.dice : ''}">
+                                <option value='2' ${game.currentBet.dice && game.currentBet.dice == 2 ? 'selected' : ''}>2</option>
+                                <option value='3' ${game.currentBet.dice && game.currentBet.dice == 3 ? 'selected' : ''}>3</option>
+                                <option value='4' ${game.currentBet.dice && game.currentBet.dice == 4 ? 'selected' : ''}>4</option>
+                                <option value='5' ${game.currentBet.dice && game.currentBet.dice == 5 ? 'selected' : ''}>5</option>
+                                <option value='6' ${game.currentBet.dice && game.currentBet.dice == 6 ? 'selected' : ''}>6</option>
                             </select>
                             <button
                                 id="placeBet"
@@ -105,7 +108,7 @@ export default class UI {
                             : ``
                         }
                     `
-                : ``
+                : `<h2>It is ${turnPlayer}'s go</h2>`
             }
         `;
         this.addItem(item);
