@@ -154,7 +154,18 @@ export default class UI {
                     `${result.loser} is out of the game.`
                 : ''
             }
-
+            ${
+                window.isHost() ?
+                    `<button
+                        onClick="
+                            (() => {
+                                window.newRound('${result.loser}');
+                            })()
+                        "
+                        >Continue</button>
+                    `
+                : ''
+            }
         `;
         this.addItem(item);
     }

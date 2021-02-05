@@ -135,6 +135,23 @@ function playGame() {
     ui.setGame(game,name);
 }
 
+function newRound(loser) {
+    rollDice();
+    players.forEach(player => {
+        player.isCurrent = false;
+        if (player.name == loser) {
+            player.isCurrent = true;
+        }
+    });
+    game.currentBet = {
+        dice: null,
+        count: null
+    };
+    game.players = players;
+    syncGame(game);
+    ui.setGame(game, name);
+}
+
 function checkDice(name) {
     let diceCount = {
         '1': 0,
@@ -150,15 +167,15 @@ function checkDice(name) {
         });
     });
     let loser,isOut = false;
-    if (game.currentBet.count < diceCount[game.currentBet.dice] + diceCount['1']) {
+    if (diceCount[game.currentBet.dice] + diceCount['1'] < game.currentBet.count) {
         loser = game.currentBet.player;
     } else {
         loser = name;
     }
     players.forEach(player => {
         if (player.name == loser) {
-            player.diceCount--;
-            if (player.diceCount == 0) {
+            player.diceRemaining = player.diceRemaining - 1;
+            if (player.diceRemaining == 0) {
                 isOut = true;
             }
         }
@@ -267,6 +284,12 @@ function init() {
             });
         }
     }
+
+    window.isHost = function () {
+        return isHost;
+    }
+
+    window.newRound = newRound;
 }
 
 document.addEventListener('DOMContentLoaded', init, false);
