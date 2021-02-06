@@ -3,7 +3,7 @@ const { default: UI } = require('./class.UI');
 const { default: Bet } = require('./class.Bet');
 const peerConfig = {
     config: {'iceServers': [
-      { urls: 'stun2.l.google.com:193022' },
+      { urls: 'stun:stun2.l.google.com:193022' },
       { urls: 'turn:numb.viagenie.ca:3478', username: 'nathan@thisiscrowd.com', credential: 'vDP9$W1XtDGYHq'}
     ]} /* Sample servers, please use appropriate ones */
   };
