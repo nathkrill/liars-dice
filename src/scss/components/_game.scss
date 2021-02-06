@@ -1,0 +1,47 @@
+.game {
+    display: contents;
+    > * {
+        position: relative;
+    }
+
+    .players {
+        list-style: none;
+        padding: 0;
+        margin: 1em 0;
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: center;
+        max-height: 10em;
+        h3 {
+            margin: 0.2em;
+        }
+        h3:not(.current) {
+            opacity: 0.8;
+        }
+    }
+
+    .bet {
+        text-align: center;
+        font-family: var(--sigmar);
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: stretch;
+        align-items: flex-start;
+        > * {
+            flex: 1 0 0;
+            min-width: 120px;
+            margin: 0.5em;
+        }
+        > p {
+            flex: 1 0 100%;
+        }
+        > p > button {
+            margin-top: 0.5em;
+        }
+        input {
+            width: 3ch;
+            display: inline;
+        }
+    }
+}

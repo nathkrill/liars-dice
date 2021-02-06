@@ -1,0 +1,48 @@
+.menu {
+    
+
+    input,button {
+        margin: 0.5em 0;
+        & + label {
+            display: block;
+            margin: 0 0 0.5em;
+        }
+    }
+
+    .game-id {
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    #playerRoster {
+        background-color: var(--sandstone);
+        box-shadow: -4px 4px 0.5em -0.4em black;
+        border-radius: 4px;
+        list-style: none;
+        margin: 1em 0;
+        padding: 0.8em 1em;
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: center;
+        max-height: 6em;
+        min-width: 20ch;
+        font-family: var(--sigmar);
+        color: var(--gold);
+        position: relative;
+        p {
+            font-weight: 400;
+            --sandstone-light: 60%;
+            // --sandstone: hsl(var(--sandstone-hue), var(--sandstone-sat), var(--sandstone-light));
+            position:absolute;
+            top: 0;
+            left: 0.5em;
+            transform: translateY(-50%);
+            margin: 0;
+            padding: 0.3em;
+            line-height: 1;
+            border-radius: 4px;
+            background-color: hsl(var(--sandstone-hue), var(--sandstone-sat), var(--sandstone-light));
+            color: var(--sandstone);
+        }
+    }
+}

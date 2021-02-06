@@ -7,6 +7,7 @@ export default class UI {
 
     clear() {
         this.el.innerHTML = null;
+        this.el.className = '';
     }
 
     /**
@@ -28,12 +29,10 @@ export default class UI {
             }
             players += `
                 <li>
-                    <h3>
-                        ${player.isCurrent ? '<b>' : '' }
-                            ${player.isOut ? '<strike>' : ''}
-                                ${player.name} ${!player.isOut ? `(${player.diceRemaining} dice left)` : ''}
-                            ${player.isOut ? '</strike>' : ''}
-                        ${player.isCurrent ? '</b>' : '' }
+                    <h3 class='${player.isCurrent ? 'current' : '' }'>
+                        ${player.isOut ? '<strike>' : ''}
+                            ${player.name} ${!player.isOut ? `(${player.diceRemaining} dice left)` : ''}
+                        ${player.isOut ? '</strike>' : ''}
                     </h3>
                 </li>
             `;
@@ -54,10 +53,20 @@ export default class UI {
             <ul class='players'>
                 ${players}
             </ul>
-            <h2>Current Bet</h2>
-            <p>
+            <h2>
+                Current Bet
                 ${
-                    game.currentBet.dice ? `${game.currentBet.player} bet: ${game.currentBet.count}x ${game.currentBet.dice}`
+                    game.currentBet.dice ? 
+                        `
+                            <br>
+                            <small>(${game.currentBet.player})</small>
+                        `
+                    : ''
+                }
+            </h2>
+            <p style='display: flex;flex-flow:row wrap;justify-content: flex-start;align-items:center'>
+                ${
+                    game.currentBet.dice ? `<dice-el value="${game.currentBet.dice}"></dice-el> &nbsp;x${game.currentBet.count}`
                     : 'There is no current bet'
                 }
             </p>
@@ -67,27 +76,41 @@ export default class UI {
                 currentPlayer.isCurrent ?
                     `
                         <h2>It is your go</h2>
-                        <p>
-                            Bet: <input type='number' id="betNumber" value="${game.currentBet.count ? game.currentBet.count : '1'}" />x 
-                            
-                            <dice-counter id="betDie" value="${game.currentBet.dice ? game.currentBet.dice : ''}" ${game.isPalefico ? 'allowOnes' : ''}></dice-counter>
-                            <button
-                                id="placeBet"
-                                onClick='(() => {
-                                    window.validateBet({
-                                        count: betNumber.value,
-                                        dice: betDie.value,
-                                    }, ${JSON.stringify(game.currentBet)}).then(() => {
-                                        window.placeBet({
+                        <div class='bet'>
+                            <p>
+                                Bet: <br>
+                                <counter-el id="betNumber" value="${game.currentBet.count ? game.currentBet.count : '1'}" min='1'></counter-el> x
+                                &nbsp;
+                                <dice-counter
+                                    id="betDie"
+                                    value="${game.currentBet.dice ? game.currentBet.dice : ''}"
+                                    ${game.isPalefico ? 'allowones' : ''}
+                                    ${
+                                        game.isPalefico ?
+                                            `${
+                                                game.currentBet.dice ? 'disabled' : ''
+                                            }`
+                                        : ''
+                                    }
+                                ></dice-counter><br>
+                                <button
+                                    id="placeBet"
+                                    onClick='(() => {
+                                        window.validateBet({
                                             count: betNumber.value,
                                             dice: betDie.value,
-                                            player: "${currentPlayer.name}"
-                                        });
-                                    }, e => {
-                                        badBet.innerHTML = e;
-                                    })
-                                })()'
-                            >Place Bet</button><span id="badBet" style='color: red;'><span>
+                                        }, ${JSON.stringify(game.currentBet)}).then(() => {
+                                            window.placeBet({
+                                                count: betNumber.value,
+                                                dice: betDie.value,
+                                                player: "${currentPlayer.name}"
+                                            });
+                                        }, e => {
+                                            badBet.innerHTML = e;
+                                        })
+                                    })()'
+                                >Place Bet</button><span id="badBet" style='color: red;'><span>
+                            </p>
                             ${
                                 game.currentBet.dice && !game.isPalefico ?
                                 `<button
@@ -98,17 +121,17 @@ export default class UI {
                                 >Exact</button>`
                                 : ``
                             }
-                        </p>
-                        ${
-                            game.currentBet.dice ?
-                                `<button
-                                    id="doubt"
-                                    onClick='(() => {
-                                        window.doubtBet();
-                                    })()'
-                                >Doubt</button>`
-                            : ``
-                        }
+                            ${
+                                game.currentBet.dice ?
+                                    `<button
+                                        id="doubt"
+                                        onClick='(() => {
+                                            window.doubtBet();
+                                        })()'
+                                    >Doubt</button>`
+                                : ``
+                            }
+                        </div>
                     `
                 : `<h2>It is ${turnPlayer}'s go</h2>`
             }
@@ -125,24 +148,20 @@ export default class UI {
             player.dice.forEach(die => {
                 dice += `
                     <li>
-                        ${
-                            die == result.bet.dice || (die == 1 && !result.wasPalefico) ? 
-                                '<b>'
+                        <dice-el value="${die}"
+                            ${
+                                result.bet.dice == die || (die == 1 && !result.wasPalefico) ?
+                                    'style="--dice-border-width: 4px;--dice-border-color: hsl(var(--sandstone-hue), var(--sandstone-sat), 30%);"'
                                 : ''
-                        }
-                            <dice-el value="${die}"></dice-el>
-                        ${
-                            die == result.bet.dice || (die == 1 && !result.wasPalefico) ? 
-                                '</b>'
-                                : ''
-                        }
+                            }
+                        ></dice-el>
                     </li>
                 `;
             });
             players += `
                 <li>
-                    ${player.name}: 
-                    <ul>
+                    <h4>${player.name}</h4>
+                    <ul class='dice'>
                         ${dice}
                     </ul>
                 </li>
@@ -150,7 +169,7 @@ export default class UI {
         });
         item.innerHTML = `
             <h2>Show the dice!</h2>
-            <ul class='players'>${players}</ul>
+            <ul class='players' style='list-style:none;padding: 0;margin: 1em 0;'>${players}</ul>
             <p>The bet was ${result.bet.count}x ${result.bet.dice}. ${result.doubt} doubted.</p>
             <p>There were a total of ${result.total}x ${result.bet.dice} ${result.wasPalefico ? '' : '+ 1.'}</p>
             <p>${result.loser} loses a die.</p>
@@ -184,24 +203,20 @@ export default class UI {
             player.dice.forEach(die => {
                 dice += `
                     <li>
-                        ${
-                            die == result.bet.dice || die == 1 ? 
-                                '<b>'
+                        <dice-el value="${die}"
+                            ${
+                                result.bet.dice == die || (die == 1 && !result.wasPalefico) ?
+                                    'style="--dice-border-width: 4px;--dice-border-color: hsl(var(--sandstone-hue), var(--sandstone-sat), 30%);"'
                                 : ''
-                        }
-                            <dice-el value="${die}"></dice-el>
-                        ${
-                            die == result.bet.dice || die == 1 ? 
-                                '</b>'
-                                : ''
-                        }
+                            }
+                        ></dice-el>
                     </li>
                 `;
             });
             players += `
                 <li>
                     ${player.name}: 
-                    <ul>
+                    <ul class='dice'>
                         ${dice}
                     </ul>
                 </li>
@@ -209,7 +224,7 @@ export default class UI {
         });
         item.innerHTML = `
             <h2>Show the dice!</h2>
-            <ul class='players'>${players}</ul>
+            <ul class='players' style='list-style:none;padding: 0;margin: 1em 0;'>${players}</ul>
             <p>The bet was ${result.bet.count}x ${result.bet.dice}. ${result.exact} called exact.</p>
             <p>There were a total of ${result.total}x ${result.bet.dice} + 1.</p>
             <p>

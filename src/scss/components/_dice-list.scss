@@ -1,0 +1,24 @@
+ul.dice {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    
+    perspective: 40em;
+    -webkit-perspective: 40em;
+    perspective-origin: top center;
+
+    display: grid;
+    grid-auto-columns: auto;
+    grid-template-rows: repeat(3,1fr);
+    grid-gap: 1em;
+    width: min-content;
+
+    li {
+        &:nth-child(odd) {
+            grid-row: 1 / span 2;
+        }
+        &:nth-child(even) {
+            grid-row: 2 / span 2;
+        }
+    }
+}

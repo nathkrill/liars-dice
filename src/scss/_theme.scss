@@ -1,0 +1,107 @@
+:root {
+    --gold: hsl(41, 34%, 54%);
+
+    --sandstone-hue: 32;
+    --sandstone-sat: 25%;
+    --sandstone-light: 70%;
+    --sandstone: hsl(var(--sandstone-hue, 32), var(--sandstone-sat, 25%), var(--sandstone-light, 70%));
+
+    --button-border-color: var(--gold);
+    --button-border-width: 4px;
+    --button-color: var(--gold);
+    --button-background-color: var(--sandstone);
+
+    --input-background-color: var(--sandstone);
+    --input-color: var(--gold);
+}
+
+button {
+    font-family: var(--sigmar);
+    font-weight: 400;
+    font-display: swap;
+    box-shadow: inset -2px 2px 0.5em -0.4em black, -4px 4px 0.5em -0.4em black;
+    position: relative;
+
+    &::before, &::after {
+        content: '';
+        display: block;
+        background-color: var(--button-background-color);
+        position: absolute;
+        clip-path: polygon(
+            0% 0%,
+            100% 0%,
+            100% 100%,
+            0% 100%
+        );
+    }
+
+    &::before {
+        right: calc(100% + var(--button-border-width));
+        top: calc(-0.7 * var(--button-border-width));
+        width: calc(0.5 * var(--button-border-width));
+        height: calc(100% + (2 * var(--button-border-width)));
+        transform: skewY(-30deg);
+    }
+
+    &::after {
+        top: calc(100% + var(--button-border-width));
+        left: calc((-1 * var(--button-border-width)) - 1px);
+        width: calc(100% + (2 * var(--button-border-width)));
+        height: calc(0.5 * var(--button-border-width));
+        transform: skewX(-52deg);
+    }
+
+    &,&:after,&:before {
+        transition-duration: 0.2s;
+        transition-timing-function: ease-in-out;
+    }
+    transition-property: transform,filter;
+    transform-origin: bottom left;
+    &:after {
+        transition-property: clip-path;
+    }
+    &:before {
+        transition-property: clip-path;
+    }
+}
+
+button:hover {
+    transform: translateZ(2em);
+}
+
+button:active {
+    outline: none;
+    transform: translateZ(calc(-2 * var(--button-border-width)));
+    &::before {
+        clip-path: polygon(
+            100% 0%,
+            100% 0%,
+            100% 100%,
+            100% 100%
+        );
+    }
+    &::after {
+        clip-path: polygon(
+            0% 0%,
+            100% 0%,
+            100% 0%,
+            0% 0%
+        );
+    }
+}
+
+input {
+    font-family: var(--sigmar);
+    font-display: swap;
+    font-weight: 400;
+    box-shadow: -4px 4px 0.5em -0.4em black;
+
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    transition-property: transform;
+    transform-origin: center;
+
+    &:focus {
+        transform: translateZ(2em);
+    }
+}

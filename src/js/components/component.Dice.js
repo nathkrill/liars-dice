@@ -14,7 +14,7 @@ class DiceElement extends HTMLElement {
 
         style.textContent = `
             .dice {
-                display: grid;
+                display: inline-grid;
                 font-size: var(--dice-font-size, 1em);
                 border-width: var(--dice-border-width, 1px);
                 border-color: var(--dice-border-color, black);
@@ -25,6 +25,8 @@ class DiceElement extends HTMLElement {
                 width: var(--dice-counter-count-size, 1.5em);
                 height: var(--dice-counter-count-size, 1.5em);
                 color: inherit;
+                position:relative;
+                background-color: var(--dice-background-color, white);
             }
 
             .dice[data-count='1'] {
@@ -64,6 +66,7 @@ class DiceElement extends HTMLElement {
                 border-radius: 50%;
                 background-color: var(--dice-counter-color, black);
                 place-self: center;
+                position:relative;
             }
 
             dot[data-position='1-1'],dot[data-position='1-2'],dot[data-position='1-3'],dot[data-position='1-4'],dot[data-position='1-5'],dot[data-position='1-6'] {
@@ -121,7 +124,6 @@ class DiceElement extends HTMLElement {
     }
 
     updateDOM () {
-        console.log(this.value);
         let dots = '';
         for (let index = 0; index < this.value; index++) {
             dots += `<dot data-position='${index + 1}-${this.value}'></dot>`;

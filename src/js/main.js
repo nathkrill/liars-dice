@@ -12,7 +12,10 @@ function hostGame() {
             let idTag = document.createElement('span');
             idTag.classList.add('game-id');
             idTag.innerHTML = id;
+            let idInfo = document.createElement('p');
+            idInfo.innerHTML = 'Share this ID with players who want to join you.';
             ui.addItem(idTag);
+            ui.addItem(idInfo);
             name = playerName.value;
             addPlayerToRoster(playerName.value + ' (host)');
             players.push({
@@ -46,6 +49,7 @@ function onData(data) {
             break;
         case 'lobby':
             clearRoster();
+            playerRoster.innerHTML = '<p>Players</p>';
             data.players.forEach(player => {
                 addPlayerToRoster(player.name + `${player.host ? ' (host)' : ''}`);
             });
@@ -340,10 +344,14 @@ function setStatus(newStatus) {
 function init() {
     ui = new UI();
     hostGameBtn.addEventListener('click', () => {
+        joinGameBtn.parentElement.removeChild(joinGameBtn);
+        hostGameBtn.parentElement.removeChild(hostGameBtn);
         hostGame().then(startGame);
     }, false);
 
     joinGameBtn.addEventListener('click', () => {
+        joinGameBtn.parentElement.removeChild(joinGameBtn);
+        hostGameBtn.parentElement.removeChild(hostGameBtn);
         joinGame(joinId.value).then((e) => {
             name = playerName.value;
             connection.send({
@@ -355,6 +363,9 @@ function init() {
                     dice: []
                 }
             });
+            let wait = document.createElement('p');
+            wait.innerHTML = 'Waiting for the host to start the game';
+            ui.addItem(wait);
             connection.on('data', onData);
         });
     })
