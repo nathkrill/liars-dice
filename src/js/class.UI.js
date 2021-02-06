@@ -44,7 +44,7 @@ export default class UI {
         let myDice = '';
         if (!currentPlayer.isOut) {
             currentPlayer.dice.forEach(die => {
-                myDice += `<li>${die}</li>`;
+                myDice += `<li><dice-el value="${die}"></dice-el></li>`;
             });
         }
         let item = document.createElement('article');
@@ -130,7 +130,7 @@ export default class UI {
                                 '<b>'
                                 : ''
                         }
-                            ${die}
+                            <dice-el value="${die}"></dice-el>
                         ${
                             die == result.bet.dice || (die == 1 && !result.wasPalefico) ? 
                                 '</b>'
@@ -189,7 +189,7 @@ export default class UI {
                                 '<b>'
                                 : ''
                         }
-                            ${die}
+                            <dice-el value="${die}"></dice-el>
                         ${
                             die == result.bet.dice || die == 1 ? 
                                 '</b>'

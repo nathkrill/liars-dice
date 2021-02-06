@@ -2,7 +2,7 @@ class DiceCounter extends HTMLElement {
     constructor() {
         super();
 
-        this.allowOnes = this.hasAttribute('allowOnes') ? true : false;
+        this.allowones = this.hasAttribute('allowones') ? true : false;
         let valueAttribute = this.getAttribute('value');
         if (valueAttribute != 0 && valueAttribute != null) {
             if (this.allowOnes && valueAttribute == 1) {
@@ -86,7 +86,7 @@ class DiceCounter extends HTMLElement {
         } else {
             this.incrementButton.disabled = false;
         }
-        if (this.allowOnes && this.value == 1) {
+        if (this.allowones && this.value == 1) {
             this.decrementButton.disabled = true;
         } else if (this.value == 2) {
             this.decrementButton.disabled = true;
@@ -104,7 +104,7 @@ class DiceCounter extends HTMLElement {
     }
 
     decrement() {
-        if (this.allowOnes && this.value == 1) {
+        if (this.allowones && this.value == 1) {
             return;
         } else if (this.value == 2) {
             return;
