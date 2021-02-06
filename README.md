@@ -33,3 +33,5 @@ Liar's Dice (also known as Perudo) is a traditional Peruvian dice game that invo
  - Music & SFX.
  - 3D Dice.
  - Public games.
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/716812de-c63b-42a8-8754-b38157b13f35/deploy-status)](https://app.netlify.com/sites/affectionate-wiles-cb2c8d/deploys)
