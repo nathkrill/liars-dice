@@ -1,18 +1,20 @@
 const { default: Dice } = require('./class.Dice');
 const { default: UI } = require('./class.UI');
 const { default: Bet } = require('./class.Bet');
-const peerConfig = {
-    config: {'iceServers': [
-        { urls: 'stun:stun2.l.google.com:193022' },
-        { urls: 'turn:turn.bistri.com:80', username: 'homeo', credential: 'homeo' }
-    ]}
-  };
 let peer,connection,ui,players = [],connections = [], game, name,isHost = false,palefico = false;
 
 function hostGame() {
     return new Promise((res, rej) => {
         isHost = true;
-        peer = new Peer(peerConfig);
+        peer = new Peer({
+            config: {
+                iceServers: [
+                  { urls: "stun:stun.l.google.com:19302" },
+                  { urls: "turn:0.peerjs.com:3478", username: "peerjs", credential: "peerjsp" }
+                ],
+                sdpSemantics: "unified-plan"
+              }
+        });
         peer.on('open', id => {
             connection = peer.connect(id);
             let idTag = document.createElement('span');
@@ -87,7 +89,15 @@ function onData(data) {
 
 function joinGame(id) {
     return new Promise((res, rej) => {
-        peer = new Peer(peerConfig);
+        peer = new Peer({
+            config: {
+                iceServers: [
+                  { urls: "stun:stun.l.google.com:19302" },
+                  { urls: "turn:0.peerjs.com:3478", username: "peerjs", credential: "peerjsp" }
+                ],
+                sdpSemantics: "unified-plan"
+              }
+        });
         peer.on('open', () => {
             connection = peer.connect(id);
             connection.on('open', res);
