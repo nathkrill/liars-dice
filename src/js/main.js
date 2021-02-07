@@ -101,6 +101,9 @@ function joinGame(id) {
         peer.on('open', () => {
             connection = peer.connect(id);
             connection.on('open', res);
+            connection.on('error', e => {
+                window.alert(`There was a problem setting up a connection ${e.type}: ${e.message}`);
+            })
         })
     });
 }
