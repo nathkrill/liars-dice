@@ -3,12 +3,21 @@ const { default: UI } = require('./class.UI');
 const { default: Bet } = require('./class.Bet');
 let peer,connection,ui,players = [],connections = [], game, name,isHost = false,palefico = false;
 
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
+
 function hostGame() {
     return new Promise((res, rej) => {
         isHost = true;
-        peer = new Peer();
+        peer = new Peer(makeid(6));
         peer.on('open', id => {
-            connection = peer.connect(id);
             let idTag = document.createElement('span');
             idTag.classList.add('game-id');
             idTag.innerHTML = id;
