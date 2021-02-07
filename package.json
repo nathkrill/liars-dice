@@ -11,7 +11,7 @@
     "webpack": "webpack --config webpack.config.js",
     "webpackbuild": "webpack --config webpack-build.config.js",
     "start": "npm-run-all sass webpack --parallel watch:*",
-    "build": "npm run sass && webpackbuild"
+    "build": "npm run sass && npm run webpackbuild"
   },
   "repository": {
     "type": "git",
