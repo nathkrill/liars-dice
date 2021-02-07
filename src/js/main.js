@@ -6,15 +6,7 @@ let peer,connection,ui,players = [],connections = [], game, name,isHost = false,
 function hostGame() {
     return new Promise((res, rej) => {
         isHost = true;
-        peer = new Peer({
-            config: {
-                iceServers: [
-                  { urls: "stun:stun.l.google.com:19302" },
-                  { urls: "turn:0.peerjs.com:3478", username: "peerjs", credential: "peerjsp" }
-                ],
-                sdpSemantics: "unified-plan"
-              }
-        });
+        peer = new Peer();
         peer.on('open', id => {
             connection = peer.connect(id);
             let idTag = document.createElement('span');
@@ -89,15 +81,7 @@ function onData(data) {
 
 function joinGame(id) {
     return new Promise((res, rej) => {
-        peer = new Peer({
-            config: {
-                iceServers: [
-                  { urls: "stun:stun.l.google.com:19302" },
-                  { urls: "turn:0.peerjs.com:3478", username: "peerjs", credential: "peerjsp" }
-                ],
-                sdpSemantics: "unified-plan"
-              }
-        });
+        peer = new Peer();
         peer.on('open', () => {
             connection = peer.connect(id);
             connection.on('open', res);
