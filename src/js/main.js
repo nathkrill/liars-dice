@@ -4,7 +4,6 @@ const { default: Bet } = require('./class.Bet');
 const peerConfig = {
     config: {'iceServers': [
         { urls: 'stun:stun2.l.google.com:193022' },
-    //   { urls: 'turn:numb.viagenie.ca:3478', username: 'nathan@thisiscrowd.com', credential: 'vDP9$W1XtDGYHq'}
         { urls: 'turn:turn.bistri.com:80', username: 'homeo', credential: 'homeo' }
     ]}
   };
