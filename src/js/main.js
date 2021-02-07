@@ -3,9 +3,10 @@ const { default: UI } = require('./class.UI');
 const { default: Bet } = require('./class.Bet');
 const peerConfig = {
     config: {'iceServers': [
-      { urls: 'stun:stun2.l.google.com:193022' },
-      { urls: 'turn:numb.viagenie.ca:3478', username: 'nathan@thisiscrowd.com', credential: 'vDP9$W1XtDGYHq'}
-    ]} /* Sample servers, please use appropriate ones */
+        { urls: 'stun:stun2.l.google.com:193022' },
+    //   { urls: 'turn:numb.viagenie.ca:3478', username: 'nathan@thisiscrowd.com', credential: 'vDP9$W1XtDGYHq'}
+        { urls: 'turn:homeo@turn.bistri.com:80', credential: 'homeo' }
+    ]}
   };
 let peer,connection,ui,players = [],connections = [], game, name,isHost = false,palefico = false;
 
