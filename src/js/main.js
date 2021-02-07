@@ -20,7 +20,14 @@ function hostGame() {
         peer = new Peer(makeid(6), {
             host: 'akrill-peer-server.herokuapp.com',
             port: null,
-            path: '/connect'
+            path: '/connect',
+            config: {
+                iceServers: [
+                    { 'urls': 'stun:stun.l.google.com:19302' },
+                    { 'urls': 'turn:akrill-peer-server.herokuapp.com', username: 'perudo', credential: 'dudo' }
+                ],
+                sdpSemantics: 'unified-plan'
+            }
         });
         peer.on('open', id => {
             let idTag = document.createElement('span');
@@ -98,7 +105,14 @@ function joinGame(id) {
         peer = new Peer({
             host: 'akrill-peer-server.herokuapp.com',
             port: null,
-            path: '/connect'
+            path: '/connect',
+            config: {
+                iceServers: [
+                    { 'urls': 'stun:stun.l.google.com:19302' },
+                    { 'urls': 'turn:akrill-peer-server.herokuapp.com', username: 'perudo', credential: 'dudo' }
+                ],
+                sdpSemantics: 'unified-plan'
+            }
         });
         peer.on('open', () => {
             connection = peer.connect(id);
