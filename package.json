@@ -9,8 +9,9 @@
     "watch:webpack": "webpack --watch",
     "sass": "sass --style=compressed src/scss/main.scss dist/css/styles.css",
     "webpack": "webpack --config webpack.config.js",
+    "webpack-build": "webpack --config webpack-build.config.js",
     "start": "npm-run-all sass webpack --parallel watch:*",
-    "build": "npm run sass && webpack"
+    "build": "npm run sass && webpack-build"
   },
   "repository": {
     "type": "git",
