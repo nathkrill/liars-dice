@@ -1,6 +1,7 @@
 const { default: Dice } = require('./class.Dice');
 const { default: UI } = require('./class.UI');
 const { default: Bet } = require('./class.Bet');
+require('./helpers/peer');
 let peer,connection,ui,players = [],connections = [], game, name,isHost = false,palefico = false;
 
 function makeid(length) {
@@ -16,7 +17,11 @@ function makeid(length) {
 function hostGame() {
     return new Promise((res, rej) => {
         isHost = true;
-        peer = new Peer(makeid(6));
+        peer = new Peer(makeid(6), {
+            host: 'akrill-peer-server.herokuapp.com',
+            port: null,
+            path: '/connect'
+        });
         peer.on('open', id => {
             let idTag = document.createElement('span');
             idTag.classList.add('game-id');
@@ -90,7 +95,11 @@ function onData(data) {
 
 function joinGame(id) {
     return new Promise((res, rej) => {
-        peer = new Peer();
+        peer = new Peer({
+            host: 'akrill-peer-server.herokuapp.com',
+            port: null,
+            path: '/connect'
+        });
         peer.on('open', () => {
             connection = peer.connect(id);
             connection.on('open', res);
