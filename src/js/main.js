@@ -24,7 +24,7 @@ function hostGame() {
             config: {
                 iceServers: [
                     { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'turn:akrill-turn-server.herokuapp.com', username: 'perudo', credential: 'dudo' }
+                    { urls: 'turn:akrill-turn-server.herokuapp.com/turn', username: 'perudo', credential: 'dudo' }
                 ],
                 sdpSemantics: 'unified-plan'
             }
@@ -109,7 +109,7 @@ function joinGame(id) {
             config: {
                 iceServers: [
                     { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'turn:akrill-turn-server.herokuapp.com', username: 'perudo', credential: 'dudo' }
+                    { urls: 'turn:akrill-turn-server.herokuapp.com/turn', username: 'perudo', credential: 'dudo' }
                 ],
                 sdpSemantics: 'unified-plan'
             }
